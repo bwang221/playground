@@ -24,6 +24,7 @@ STANDARD='STANDARD'
 SPECIAL='SPECIAL'
 REJECTED='REJECTED'
 
+
 def sort(width: int, height: int, length: int, mass: int) -> int:
 	volume=width*height*length
 	if volume>=_bulky_volume and mass>=_heavy_package:
@@ -31,3 +32,12 @@ def sort(width: int, height: int, length: int, mass: int) -> int:
 	if volume>=_bulky_volume or mass>=_heavy_package:
 		return SPECIAL
 	return STANDARD
+
+'''
+#Alternative
+_STACKS=[STANDARD, SPECIAL, REJECTED]
+def sort(width: int, height: int, length: int, mass: int) -> int:
+	volume=width*height*length
+	idx=int(volume>=_bulky_volume)+int(mass>=_heavy_package)
+	return _STACKS[idx]
+'''
