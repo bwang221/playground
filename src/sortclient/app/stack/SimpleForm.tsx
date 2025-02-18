@@ -1,35 +1,73 @@
 "use client"
 import { useState } from 'react';
 
-export default function MyForm() {
-  const [width, setWidth] = useState('0');
-  const [height, setHeight] = useState('0');
-  const [length, setLength] = useState('0');
-  const [mass, setMass] = useState('0');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+const API_URL='http://localhost:8000/api/sort';
 
-    try {
-      const response = await fetch('/api/submit', {
+async function callAPi(url, data){
+  
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: inputValue }),
+        body: JSON.stringify(data),
       });
+      const jres= await response.json();
+      console.log(jres)
+      return jres['stack']
 
-      if (response.ok) {
-        console.log('Form submitted successfully');
-      } else {
-        console.error('Form submission failed');
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    }
-  };
+}
+export default function Page(){
+  const [width, setWidth] = useState('0');
+  const [height, setHeight] = useState('0');
+  const [length, setLength] = useState('0');
+  const [mass, setMass] = useState('0');
+  const [stack, setStack] = useState('');
 
-  return (
-    <p>hello</p>
-  );
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data={width:width?parseInt(width):0, height:height?parseInt(height):0, 
+      length:length?parseInt(length):0, mass:mass?parseInt(mass):0 };
+    const stack= await callAPi(API_URL, data);
+    console.log(stack)
+    setStack(stack);
+  }
+  return(
+  <form onSubmit={handleSubmit}>
+      <label htmlFor="text-input">Width:</label>
+      <input
+        type="number"
+        id="width-input"
+        value={width}
+        onChange={(e) => setWidth(parseInt(e.target.value))}
+      />
+
+      <label htmlFor="text-input">Height:</label>
+      <input
+        type="number"
+        id="height-input"
+        value={height}
+        onChange={(e) => setHeight(parseInt(e.target.value))}
+      />
+      <label htmlFor="text-input">Height:</label>
+      <input
+        type="number"
+        id="length-input"
+        value={length}
+        onChange={(e) => setLength(parseInt(e.target.value))}
+      />
+
+      <label htmlFor="text-input">Mass:</label>
+      <input
+        type="number"
+        id="mass-input"
+        value={length}
+        onChange={(e) => setMass(parseInt(e.target.value))}
+      />
+      <button type="submit">Submit</button>
+      <p>{stack}</p>
+    </form>
+
+  )
 }

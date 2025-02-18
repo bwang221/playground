@@ -14,7 +14,7 @@ class SortApiView(APIView):
 			"mass":10
 		}'''
 		#Validate the request data to makesure the required keys present and data in valid range >0.
-		#Return 400 is invalid.
+		#Return 400 if invalid.
 		print("****")
 		print(request.data)
 		stack=sort(**request.data)
